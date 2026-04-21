@@ -2,75 +2,377 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>图书商城</title>
-    <link rel="stylesheet" href="lab2.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #f0f0f0;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        .fixed-ad {
+            position: fixed;
+            right: 20px;
+            bottom: 80px;
+            width: 150px;
+            background: #ff8800;
+            color: white;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 999;
+        }
+        .fixed-ad:hover {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .header {
+            background: #333;
+            color: white;
+            padding: 0 20px;
+            position: sticky;
+            top: 0;
+        }
+        .logo {
+            float: left;
+            padding: 12px 0;
+        }
+        .logo img {
+            height: 45px;
+        }
+        .nav {
+            float: right;
+            list-style: none;
+        }
+        .nav li {
+            float: left;
+            margin: 0 12px;
+        }
+        .nav li a {
+            color: white;
+            text-decoration: none;
+            line-height: 70px;
+            display: block;
+        }
+        .nav li a:hover {
+            color: #ffaa00;
+        }
+        .main {
+            padding: 20px;
+        }
+        .sidebar {
+            width: 22%;
+            float: left;
+            background: #fafafa;
+            padding: 15px;
+            border-radius: 8px;
+            min-height: 450px;
+        }
+        .category {
+            position: relative;
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .category h3 {
+            margin-bottom: 12px;
+            color: #555;
+        }
+        .category ul {
+            list-style: none;
+        }
+        .category li {
+            margin: 8px 0;
+        }
+        .category a {
+            text-decoration: none;
+            color: #666;
+        }
+        .category a:hover {
+            color: #ff6600;
+        }
+        .rel-badge {
+            position: relative;
+            top: -2px;
+            left: 8px;
+            background: #ff6600;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 20px;
+        }
+        .middle {
+            width: 52%;
+            float: left;
+            padding: 0 15px;
+        }
+        .book-area {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .book-item {
+            width: 48%;
+            float: left;
+            margin: 1%;
+            background: #fef9ef;
+            border-radius: 8px;
+            padding: 8px;
+            text-align: center;
+            position: relative;
+            border: 1px solid #eee;
+        }
+        .book-item img {
+            width: 100%;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .hover-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.2s;
+        }
+        .book-item:hover .hover-layer {
+            opacity: 1;
+            visibility: visible;
+        }
+        .hover-layer button {
+            margin-top: 8px;
+            padding: 4px 10px;
+            background: #ff9900;
+            border: none;
+            border-radius: 15px;
+        }
+        .hot-list {
+            list-style: none;
+        }
+        .hot-list li {
+            float: left;
+            width: 23%;
+            margin: 1%;
+            background: #fff5e6;
+            padding: 8px;
+            text-align: center;
+            border-radius: 8px;
+        }
+        .hot-list li:hover {
+            background: #ffe0b3;
+        }
+        .hot-list img {
+            width: 60px;
+            height: 80px;
+            object-fit: cover;
+        }
+        .new-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .new-table th, .new-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            font-size: 13px;
+        }
+        .new-table th {
+            background: #f5f5f5;
+        }
+        .rightbar {
+            width: 26%;
+            float: left;
+            background: #fafafa;
+            padding: 15px;
+            border-radius: 8px;
+            min-height: 450px;
+        }
+        .promo {
+            background: #fff3e0;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+        }
+        .promo ul {
+            margin-left: 20px;
+            margin-top: 8px;
+        }
+        .footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 12px;
+            clear: both;
+        }
+        a, button, .hot-list li {
+            cursor: pointer;
+        }
+        input {
+            width: 100%;
+            padding: 6px;
+            margin: 8px 0;
+        }
+        button {
+            background: #ff8800;
+            border: none;
+            padding: 6px;
+            width: 100%;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
 
-<header class="header">
-    <div class="logo">
-        <img src="alb2.jpg" alt="图书封面">
-    </div>
-    <ul class="nav">
-        <li>首页</li>
-        <li>图书分类</li>
-        <li>热门推荐</li>
-        <li>关于我们</li>
-    </ul>
-</header>
+<div class="fixed-ad">
+    <h4>限时促销</h4>
+    <p>满100减30</p>
+    <p>会员8折</p>
+    <small>鼠标悬停关闭</small>
+</div>
 
 <div class="container">
-    <aside class="left">
-        <h2>图书分类</h2>
-        <ul>
-            <li>计算机编程</li>
-            <li>文学小说</li>
-            <li>历史社科</li>
-            <li>科普读物</li>
+    <div class="header clearfix">
+        <div class="logo">
+            <img src="lab2.jpg" alt="logo">
+        </div>
+        <ul class="nav">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">图书</a></li>
+            <li><a href="#">新书</a></li>
+            <li><a href="#">榜单</a></li>
         </ul>
-    </aside>
+    </div>
 
-    <main class="middle">
-        <div class="book-box">
-            <img src="lab22.jpg" alt="图书">
-            <div class="tip">热销中</div>
+    <div class="main clearfix">
+        <div class="sidebar">
+            <div class="category">
+                <h3>图书分类 <span class="rel-badge">热卖</span></h3>
+                <ul>
+                    <li><a href="#">文学小说</a></li>
+                    <li><a href="#">历史传记</a></li>
+                    <li><a href="#">计算机</a></li>
+                    <li><a href="#">经济管理</a></li>
+                    <li><a href="#">艺术设计</a></li>
+                </ul>
+                <div style="position: relative; top: 12px; background: #e0e0e0; padding: 5px; text-align: center; border-radius: 5px; font-size: 12px;">
+                    本周畅销榜
+                </div>
+            </div>
         </div>
 
-        <div class="hot">
-            <h2>热门推荐</h2>
-            <div class="hot-item">热门图书1</div>
-            <div class="hot-item">热门图书2</div>
-            <div class="hot-item">热门图书3</div>
+        <div class="middle">
+            <div class="book-area">
+                <h3>精选图书</h3>
+                <div class="clearfix">
+                    <div class="book-item">
+                        <img src="lab2.jpg" alt="书1">
+                        <div>《深海奇缘》</div>
+                        <div>¥49.9</div>
+                        <div class="hover-layer">
+                            <p>⭐ 4.8星</p>
+                            <p>科幻佳作</p>
+                            <button>购买</button>
+                        </div>
+                    </div>
+                    <div class="book-item">
+                        <img src="lab2.jpg" alt="书2">
+                        <div>《星空密码》</div>
+                        <div>¥68.0</div>
+                    </div>
+                    <div class="book-item">
+                        <img src="lab2.jpg" alt="书3">
+                        <div>《AI时代》</div>
+                        <div>¥89.0</div>
+                    </div>
+                    <div class="book-item">
+                        <img src="lab2.jpg" alt="书4">
+                        <div>《美食之旅》</div>
+                        <div>¥55.0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="book-area">
+                <h3>热门推荐</h3>
+                <ul class="hot-list clearfix">
+                    <li><img src="lab2.jpg" alt="热1"><span>三体</span><span>9.5分</span></li>
+                    <li><img src="lab2.jpg" alt="热2"><span>活着</span><span>9.3分</span></li>
+                    <li><img src="lab2.jpg" alt="热3"><span>白夜行</span><span>9.1分</span></li>
+                    <li><img src="lab2.jpg" alt="热4"><span>平凡的世界</span><span>9.0分</span></li>
+                </ul>
+            </div>
+
+            <div class="book-area">
+                <h3>新书上市</h3>
+                <table class="new-table">
+                    <thead>
+                        <tr><th>书名</th><th>作者</th><th>定价</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>元宇宙基石</td><td>刘智远</td><td>¥79.00</td></tr>
+                        <tr><td>历史的侧面</td><td>吴思</td><td>¥68.00</td></tr>
+                        <tr><td>深度学习实战</td><td>李沐</td><td>¥129.00</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <div class="new-book">
-            <h2>新书上市</h2>
-            <table border="1" cellpadding="8" cellspacing="0">
-                <tr>
-                    <td>书名</td>
-                    <td>价格</td>
-                    <td>上架时间</td>
-                </tr>
-                <tr>
-                    <td>HTML网页设计</td>
-                    <td>59元</td>
-                    <td>2026-04-21</td>
-                </tr>
-                <tr>
-                    <td>CSS布局基础</td>
-                    <td>45元</td>
-                    <td>2026-04-21</td>
-                </tr>
-            </table>
+        <div class="rightbar">
+            <div class="promo">
+                <h3>本周促销</h3>
+                <ul>
+                    <li>文学类 满2件8折</li>
+                    <li>科技类 满100减20</li>
+                    <li>教辅类 买三免一</li>
+                </ul>
+                <p style="margin-top: 8px; color: #ff6600;">优惠码: BOOK2025</p>
+            </div>
+            <div class="promo">
+                <h3>邮件订阅</h3>
+                <input type="email" placeholder="您的邮箱">
+                <button>订阅</button>
+            </div>
+            <div style="margin-top: 15px; text-align: center;">
+                <img src="labb2.jpg" alt="促销广告" style="width: 100%; border-radius: 8px;">
+                <p style="font-size: 12px; margin-top: 5px;">新书限时5折起</p>
+            </div>
         </div>
-    </main>
+    </div>
 
-    <aside class="right">
-        <h3>促销信息</h3>
-        <p>满100减20</p>
-        <p>会员享8折优惠</p>
-        <p>新用户首单立减</p>
-    </aside>
+    <div class="footer">
+        <p>图书商城 | 浮动布局 | 定位效果 | 悬停显示</p>
+    </div>
 </div>
 
 </body>
