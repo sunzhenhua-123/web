@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>图书商城 | 登录注册</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{background:#f0f0f0;font-family:Arial;padding:20px;}
+        .clearfix:after{content:"";display:table;clear:both;}
+        
+        .fixed-ad{position:fixed;right:20px;bottom:80px;width:140px;background:#ff8800;color:#fff;padding:10px;border-radius:10px;text-align:center;z-index:99;}
+        .fixed-ad:hover{opacity:0;visibility:hidden;}
+        
+        .container{max-width:1100px;margin:0 auto;background:#fff;border-radius:10px;}
+        
+        .header{background:#2c3e50;color:#fff;padding:0 20px;position:sticky;top:0;}
+        .logo{float:left;padding:12px 0;}
+        .logo img{height:40px;}
+        .nav{float:right;list-style:none;}
+        .nav li{float:left;margin:0 12px;}
+        .nav li a{color:#fff;text-decoration:none;line-height:64px;display:block;}
+        .nav li a:hover{color:#ffaa00;}
+        .user-area{float:right;line-height:64px;margin-left:20px;}
+        .login-btn{background:#ff8800;padding:5px 12px;border-radius:20px;cursor:pointer;margin-left:8px;}
+        .logout-btn{background:#7f8c8d;padding:3px 10px;border-radius:15px;font-size:12px;cursor:pointer;margin-left:8px;}
+        
+        .main{padding:20px;}
+        .sidebar{width:22%;float:left;background:#fafafa;padding:15px;border-radius:8px;min-height:400px;}
+        .category{position:relative;background:#fff;padding:12px;border-radius:8px;}
+        .category h3{margin-bottom:12px;}
+        .category ul{list-style:none;}
+        .category li{margin:8px 0;}
+        .category a{text-decoration:none;color:#555;}
+        .category a:hover{color:#ff6600;}
+        .rel-badge{position:relative;top:-2px;left:8px;background:#ff6600;color:#fff;font-size:10px;padding:2px 6px;border-radius:20px;}
+        
+        .middle{width:52%;float:left;padding:0 15px;}
+        .book-box{background:#fff;padding:12px;border-radius:8px;margin-bottom:20px;border:1px solid #eee;}
+        .book-item{width:48%;float:left;margin:1%;background:#fef9ef;border-radius:8px;padding:8px;text-align:center;position:relative;}
+        .book-item img{width:100%;height:120px;object-fit:cover;border-radius:5px;background:#ddd;}
+        .hover-layer{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);color:#fff;display:flex;flex-direction:column;justify-content:center;align-items:center;border-radius:8px;opacity:0;visibility:hidden;transition:0.2s;}
+        .book-item:hover .hover-layer{opacity:1;visibility:visible;}
+        .hover-layer button{margin-top:8px;padding:4px 12px;background:#ff9900;border:none;border-radius:15px;cursor:pointer;}
+        
+        .hot-list{list-style:none;}
+        .hot-list li{float:left;width:23%;margin:1%;background:#fff5e6;padding:8px;text-align:center;border-radius:8px;cursor:pointer;}
+        .hot-list li:hover{background:#ffe0b3;}
+        .hot-list img{width:55px;height:75px;object-fit:cover;}
+        
+        .book-table{width:100%;border-collapse:collapse;margin-top:10px;}
+        .book-table th,.book-table td{border:1px solid #ddd;padding:6px;text-align:center;font-size:13px;}
+        .book-table th{background:#f5f5f5;}
+        
+        .rightbar{width:26%;float:left;background:#fafafa;padding:15px;border-radius:8px;min-height:400px;}
+        .promo{background:#fff3e0;padding:12px;border-radius:8px;margin-bottom:15px;}
+        .promo ul{margin-left:20px;}
+        .footer{background:#2c3e50;color:#fff;text-align:center;padding:12px;clear:both;}
+        
+        .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;display:none;justify-content:center;align-items:center;}
+        .modal.show{display:flex;}
+        .modal-content{position:relative;background:#fff;width:340px;border-radius:12px;padding:25px;}
+        .close{position:absolute;top:10px;right:15px;font-size:24px;cursor:pointer;}
+        .tab-bar{display:flex;border-bottom:2px solid #eee;margin-bottom:20px;}
+        .tab{flex:1;text-align:center;padding:10px;cursor:pointer;font-weight:bold;color:#666;}
+        .tab.active{color:#ff8800;border-bottom:2px solid #ff8800;}
+        .form-panel{display:none;}
+        .form-panel.active{display:block;}
+        .form-group{margin-bottom:15px;}
+        .form-group label{display:block;margin-bottom:5px;font-size:14px;}
+        .form-group input{width:100%;padding:8px;border:1px solid #ddd;border-radius:6px;}
+        .submit-btn{width:100%;padding:10px;background:#ff8800;color:#fff;border:none;border-radius:6px;cursor:pointer;margin-top:5px;}
+        .error{color:red;font-size:12px;margin-top:5px;display:none;}
+    </style>
+</head>
+<body>
+
+<div class="fixed-ad"><h4>限时促销</h4><p>满100减30</p><small>悬停关闭</small></div>
+
+<div class="container">
+    <div class="header clearfix">
+        <div class="logo"><img src="lab2.jpg" alt="logo"></div>
+        <ul class="nav"><li><a href="#">首页</a></li><li><a href="#">图书</a></li><li><a href="#">新书</a></li><li><a href="#">榜单</a></li></ul>
+        <div class="user-area" id="userArea"><span id="userName">游客</span><span class="login-btn" id="showLoginBtn">登录/注册</span></div>
+    </div>
+
+    <div class="main clearfix">
+        <div class="sidebar">
+            <div class="category">
+                <h3>图书分类 <span class="rel-badge">热卖</span></h3>
+                <ul><li><a href="#">文学小说</a></li><li><a href="#">历史传记</a></li><li><a href="#">计算机</a></li><li><a href="#">经济管理</a></li></ul>
+                <div style="position:relative; top:10px; background:#e0e0e0; padding:5px; text-align:center; border-radius:5px; font-size:12px;">本周畅销榜</div>
+            </div>
+        </div>
+
+        <div class="middle">
+            <div class="book-box">
+                <h3>精选图书</h3>
+                <div class="clearfix">
+                    <div class="book-item"><img src="lab2.jpg" alt="书"><div>《深海奇缘》</div><div>¥49.9</div><div class="hover-layer"><p>⭐4.8星</p><button>购买</button></div></div>
+                    <div class="book-item"><img src="lab2.jpg" alt="书"><div>《星空密码》</div><div>¥68.0</div></div>
+                    <div class="book-item"><img src="lab2.jpg" alt="书"><div>《AI时代》</div><div>¥89.0</div></div>
+                    <div class="book-item"><img src="lab2.jpg" alt="书"><div>《美食之旅》</div><div>¥55.0</div></div>
+                </div>
+            </div>
+
+            <div class="book-box">
+                <h3>热门推荐</h3>
+                <ul class="hot-list clearfix">
+                    <li><img src="lab2.jpg" alt=""><span>三体</span><span>9.5分</span></li>
+                    <li><img src="lab2.jpg" alt=""><span>活着</span><span>9.3分</span></li>
+                    <li><img src="lab2.jpg" alt=""><span>白夜行</span><span>9.1分</span></li>
+                    <li><img src="lab2.jpg" alt=""><span>平凡的世界</span><span>9.0分</span></li>
+                </ul>
+            </div>
+
+            <div class="book-box">
+                <h3>新书上市</h3>
+                <table class="book-table">
+                    <thead><tr><th>书名</th><th>作者</th><th>定价</th></tr></thead>
+                    <tbody><tr><td>元宇宙基石</td><td>刘智远</td><td>¥79.00</td></tr>
+                    <tr><td>历史的侧面</td><td>吴思</td><td>¥68.00</td></tr>
+                    <tr><td>深度学习实战</td><td>李沐</td><td>¥129.00</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="rightbar">
+            <div class="promo"><h3>本周促销</h3><ul><li>文学类 满2件8折</li><li>科技类 满100减20</li></ul><p style="margin-top:8px;color:#ff6600;">优惠码:BOOK2025</p></div>
+            <div class="promo"><h3>邮件订阅</h3><input type="email" placeholder="您的邮箱" style="width:100%;padding:6px;"><button style="width:100%;background:#ff8800;border:none;padding:6px;margin-top:8px;border-radius:5px;">订阅</button></div>
+            <div style="margin-top:15px;text-align:center;"><img src="lab22.jpg" alt="广告" style="width:100%;border-radius:8px;"><p style="font-size:12px;">新书限时5折</p></div>
+        </div>
+    </div>
+
+    <div class="footer"><p>图书商城 | 浮动布局 | 定位 | 悬停效果 | 登录注册(本地存储)</p></div>
+</div>
+
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeModal">&times;</span>
+        <div class="tab-bar"><div class="tab active" data-tab="login">登录</div><div class="tab" data-tab="register">注册</div></div>
+        <div id="loginForm" class="form-panel active">
+            <div class="form-group"><label>用户名</label><input type="text" id="loginUser" placeholder="请输入用户名"></div>
+            <div class="form-group"><label>密码</label><input type="password" id="loginPwd" placeholder="请输入密码"></div>
+            <div id="loginErr" class="error"></div>
+            <button class="submit-btn" id="doLogin">登录</button>
+        </div>
+        <div id="registerForm" class="form-panel">
+            <div class="form-group"><label>用户名</label><input type="text" id="regUser" placeholder="至少3位"></div>
+            <div class="form-group"><label>密码</label><input type="password" id="regPwd" placeholder="至少4位"></div>
+            <div class="form-group"><label>确认密码</label><input type="password" id="regConfirmPwd" placeholder="再次输入"></div>
+            <div id="regErr" class="error"></div>
+            <button class="submit-btn" id="doRegister">注册</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let users = JSON.parse(localStorage.getItem('book_users')) || [];
+    let currentUser = localStorage.getItem('current_user') || null;
+    
+    function saveUsers(){ localStorage.setItem('book_users', JSON.stringify(users)); }
+    
+    function updateUI(){
+        let nameSpan = document.getElementById('userName');
+        let btnSpan = document.getElementById('showLoginBtn');
+        if(currentUser){
+            nameSpan.innerHTML = currentUser + ' <span class="logout-btn" id="logoutBtn">退出</span>';
+            btnSpan.style.display = 'none';
+            let logout = document.getElementById('logoutBtn');
+            if(logout) logout.onclick = function(){ currentUser=null; localStorage.removeItem('current_user'); updateUI(); };
+        } else {
+            nameSpan.innerHTML = '游客';
+            btnSpan.style.display = 'inline-block';
+        }
+    }
+    
+    let modal = document.getElementById('modal');
+    let showBtn = document.getElementById('showLoginBtn');
+    let closeBtn = document.getElementById('closeModal');
+    
+    showBtn.onclick = function(){ if(!currentUser){ modal.classList.add('show'); document.getElementById('loginUser').value=''; document.getElementById('loginPwd').value=''; document.getElementById('regUser').value=''; document.getElementById('regPwd').value=''; document.getElementById('regConfirmPwd').value=''; document.getElementById('loginErr').style.display='none'; document.getElementById('regErr').style.display='none'; } };
+    closeBtn.onclick = function(){ modal.classList.remove('show'); };
+    window.onclick = function(e){ if(e.target===modal) modal.classList.remove('show'); };
+    
+    let tabs = document.querySelectorAll('.tab');
+    tabs.forEach(t=>{ t.onclick = function(){
+        tabs.forEach(tt=>tt.classList.remove('active'));
+        this.classList.add('active');
+        if(this.getAttribute('data-tab')=='login'){
+            document.getElementById('loginForm').classList.add('active');
+            document.getElementById('registerForm').classList.remove('active');
+        } else {
+            document.getElementById('loginForm').classList.remove('active');
+            document.getElementById('registerForm').classList.add('active');
+        }
+    }});
+    
+    document.getElementById('doLogin').onclick = function(){
+        let name = document.getElementById('loginUser').value.trim();
+        let pwd = document.getElementById('loginPwd').value;
+        let err = document.getElementById('loginErr');
+        if(!name || !pwd){ err.style.display='block'; err.innerText='请输入用户名和密码'; return; }
+        let found = users.find(u=>u.username===name && u.password===pwd);
+        if(found){ currentUser=name; localStorage.setItem('current_user',currentUser); updateUI(); modal.classList.remove('show'); }
+        else { err.style.display='block'; err.innerText='用户名或密码错误'; }
+    };
+    
+    document.getElementById('doRegister').onclick = function(){
+        let name = document.getElementById('regUser').value.trim();
+        let pwd = document.getElementById('regPwd').value;
+        let confirm = document.getElementById('regConfirmPwd').value;
+        let err = document.getElementById('regErr');
+        if(!name || !pwd || !confirm){ err.style.display='block'; err.innerText='请填写完整信息'; return; }
+        if(name.length<3){ err.style.display='block'; err.innerText='用户名至少3位'; return; }
+        if(pwd.length<4){ err.style.display='block'; err.innerText='密码至少4位'; return; }
+        if(pwd!==confirm){ err.style.display='block'; err.innerText='两次密码不一致'; return; }
+        if(users.find(u=>u.username===name)){ err.style.display='block'; err.innerText='用户名已存在'; return; }
+        users.push({username:name, password:pwd});
+        saveUsers();
+        alert('注册成功！请登录');
+        document.querySelector('.tab[data-tab="login"]').click();
+        document.getElementById('loginUser').value = name;
+        document.getElementById('loginPwd').value = '';
+        document.getElementById('loginErr').style.display='none';
+    };
+    
+    if(users.length===0){ users.push({username:'admin',password:'123456'}); saveUsers(); }
+    updateUI();
+</script>
+</body>
+</html>
